@@ -39,7 +39,14 @@
             name="firstname"
             id="firstname"
             placeholder="Prénom"
+            required
           />
+          <p
+            class="card__form__row__errorFormat"
+            v-if="checkFirstname == 'invalideFirstname'"
+          >
+            Veuillez saisir votre prénom
+          </p>
         </div>
         <div v-if="mode == 'create'" class="card__form__row">
           <input
@@ -49,7 +56,14 @@
             name="lastname"
             id="lastname"
             placeholder="Nom"
+            required
           />
+          <p
+            class="card__form__row__errorFormat"
+            v-if="checkLastname == 'invalideLastname'"
+          >
+            Veuillez saisir votre nom
+          </p>
         </div>
         <div class="card__form__row">
           <input
@@ -61,7 +75,19 @@
             placeholder="Adresse mail"
             required
           />
+          <p
+            class="card__form__row__errorFormat"
+            v-if="checkEmail == 'invalideEmail'"
+          >
+            Veuillez saisir votre Adresse mail
+          </p>
         </div>
+        <p
+          class="card__form__error"
+          v-if="mode == 'create' && status == 'error__create'"
+        >
+          L'adresse mail est déjà utilisé
+        </p>
         <div class="card__form__row">
           <input
             class="card__form__input"
@@ -70,14 +96,35 @@
             name="password"
             id="password"
             placeholder="Mot de passe"
+            required
           />
+          <p
+            class="card__form__row__errorFormat"
+            v-if="checkPassword == 'invalidePassword'"
+          >
+            Veuillez saisir un mot de passe au bon format!
+          </p>
+          <p
+            class="card__form__row__errorFormat"
+            v-if="regexPassword == 'invalideRegexPass'"
+          >
+            Le mot de passe doit faire au moins 8 caractères sans signes
+            spéciaux.
+          </p>
         </div>
+        <p
+          class="card__form__error"
+          v-if="mode == 'login' && status == 'error_login'"
+        >
+          Adresse mail et / ou mot de passe non reconnu !
+        </p>
         <div class="card__form__row">
           <button
             v-if="mode == 'create'"
             @click="createAccount()"
             class="card__form__submit button"
             :class="{ 'button--disabled': !filledFields }"
+            :disabled="!filledFields"
             type="button"
           >
             <span v-if="status == 'loading'">Création en cours...</span>
@@ -88,6 +135,7 @@
             v-on:click="login()"
             class="card__form__submit button"
             :class="{ 'button--disabled': !filledFields }"
+            :disabled="!filledFields"
             type="button"
           >
             Connexion
@@ -113,23 +161,34 @@ export default {
       lastname: "",
       email: "",
       password: "",
+      checkFirstname: "",
+      checkLastname: "",
+      checkEmail: "",
+      checkPassword: "",
+      regexPassword: "",
     };
+  },
+  mounted() {
+    if (localStorage.getItem("user")) {
+      this.$router.push("/home");
+      return;
+    }
   },
   computed: {
     filledFields() {
       if (this.mode == "create") {
         if (
-          this.firstname != null &&
-          this.lastname != null &&
-          this.email != null &&
-          this.password != null
+          this.firstname != "" &&
+          this.lastname != "" &&
+          this.email != "" &&
+          this.password != ""
         ) {
           return true;
         } else {
           return false;
         }
       } else {
-        if (this.email != null && this.password != null) {
+        if (this.email != "" && this.password != "") {
           return true;
         } else {
           return false;
@@ -148,6 +207,67 @@ export default {
       this.mode = "create";
       this.formToggle1 = false;
       this.formToggle2 = true;
+    },
+    login() {
+      const self = this;
+      //La méthode "dispath" permet de propager notre action "login" dans le store avec un payload
+      this.$store
+        .dispatch("login", {
+          email: this.email,
+          password: this.password,
+        })
+        .then(
+          function () {
+            //On accède au router et on redirrige vers la route "home" avec la méthode "push"
+            self.$router.push("/home");
+          },
+          function (error) {
+            console.log(error);
+          }
+        );
+    },
+    createAccount() {
+      const self = this;
+      if (!this.firstname) {
+        this.checkFirstname = "invalideFirstname";
+      }
+      if (!this.lastname) {
+        this.checkLastname = "invalideLastname";
+      }
+      if (!this.email) {
+        this.checkEmail = "invalideEmail";
+      }
+      if (!this.password) {
+        this.checkPassword = "invalidePassword";
+      } else if (!this.validateRegexPass(this.password)) {
+        this.regexPassword = "invalideRegexPass";
+      }
+      if (
+        this.firstname &&
+        this.lastname &&
+        this.email &&
+        this.validateRegexPass(this.password)
+      ) {
+        this.$store
+          .dispatch("createAccount", {
+            firstname: this.firstname,
+            lastname: this.lastname,
+            email: this.email,
+            password: this.password,
+          })
+          .then(
+            function () {
+              self.login();
+            },
+            function (error) {
+              console.log(error);
+            }
+          );
+      }
+    },
+    validateRegexPass(password) {
+      const regex = /^[a-zA-Z0-9éèêàîïôöûü.!_-]{8,}$/;
+      return regex.test(password);
     },
   },
 };
@@ -182,7 +302,7 @@ $tertiary_color--clear: #88ec88;
 .card {
   &__btn {
     @include flexbox($display: flex, $justify: center, $align: center);
-    @media screen and (max-width: 430px) {
+    @media screen and (max-width: 770px) {
       flex-direction: column;
     }
     &__login {
@@ -195,7 +315,6 @@ $tertiary_color--clear: #88ec88;
       border-bottom: 0.2rem solid $tertiary_color;
       border-radius: 1rem;
       padding: 0.8rem;
-      font-weight: 600;
       font-size: 1.2rem;
     }
     &__signup {
@@ -212,8 +331,8 @@ $tertiary_color--clear: #88ec88;
     }
   }
   &__form {
-    @include dimension($width: 50%, $height: 20rem);
-    @media screen and (max-width: 430px) {
+    @include dimension($width: 50%, $height: 30rem);
+    @media screen and (max-width: 770px) {
       width: 90%;
     }
     border: 0.1rem solid $secondary_color;
@@ -229,12 +348,17 @@ $tertiary_color--clear: #88ec88;
       font-size: 1rem;
       font-weight: 600;
     }
+    &__row {
+      &__errorFormat {
+        color: $secondary_color;
+      }
+    }
     &__submit {
       padding: 1rem;
       font-size: 1rem;
       @include dimension($width: 60%, $height: 2rem);
       @include flexbox($display: flex, $justify: center, $align: center);
-      margin: 0 auto;
+      margin: 1rem auto;
       background-color: $tertiary_color;
       color: white;
       border-radius: 0.5rem;
@@ -246,5 +370,8 @@ $tertiary_color--clear: #88ec88;
   background-color: $primary_color;
   border-radius: 1rem;
   font-weight: 600;
+}
+.button--disabled {
+  opacity: 0.5;
 }
 </style>
