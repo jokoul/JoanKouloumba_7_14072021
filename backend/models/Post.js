@@ -33,27 +33,27 @@ Post.hasMany(Comment, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-Comment.belongsTo(Post);
+Comment.belongsTo(Post, { foreignKey: "post_id" });
 
 Post.hasMany(PostLiked, {
   foreignKey: "post_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-PostLiked.belongsTo(Post);
+PostLiked.belongsTo(Post, { foreignKey: "post_id" });
 
 Post.hasMany(PostDisliked, {
   foreignKey: "post_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-PostDisliked.belongsTo(Post);
+PostDisliked.belongsTo(Post, { foreignKey: "post_id" });
 
 Post.hasOne(PostModerated, {
   foreignKey: "post_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-PostModerated.belongsTo(Post);
+PostModerated.belongsTo(Post, { foreignKey: "post_id" });
 
 module.exports = Post;

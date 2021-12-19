@@ -50,7 +50,7 @@ const profilStorage = multer.diskStorage({
   },
 });
 
-exports.post = multer({ filterFile, storage: postStorage }).single("image");
+exports.post = multer({ filterFile, storage: postStorage }).single("image_url");
 exports.profil = multer({ filterFile, storage: profilStorage }).single(
   "profil"
 );

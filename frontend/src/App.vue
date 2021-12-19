@@ -11,7 +11,7 @@
 export default {};
 </script>
 
-<style lang="scss" FooterView>
+<style lang="scss">
 $primary_color: #ffd7d7;
 $secondary_color: #fd2d01;
 $tertiary_color: #013a01;

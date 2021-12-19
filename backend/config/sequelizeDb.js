@@ -1,10 +1,16 @@
 const { Sequelize, DataTypes } = require("sequelize");
+require("dotenv").config();
+
+const envDatabase = process.env.MYSQL_DATABASE;
+const envUsername = process.env.MYSQL_USERNAME;
+const envPassword = process.env.MYSQL_PASSWORD;
+const envHost = process.env.MYSQL_HOST;
 
 const sequelizeDB = {
-  database: "projet7",
-  username: "root",
-  password: "",
-  host: "localhost",
+  database: envDatabase,
+  username: envUsername,
+  password: envPassword,
+  host: envHost,
   dialect: "mysql",
 };
 

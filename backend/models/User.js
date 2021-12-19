@@ -46,7 +46,7 @@ User.hasMany(Post, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-Post.belongsTo(User);
+Post.belongsTo(User, { foreignKey: "user_id" });
 
 //Les associations sont définis par paire afin de permettre au 2 tables de prendre connaissance de l'existence de la relation.
 User.hasMany(PostLiked, {
@@ -54,27 +54,27 @@ User.hasMany(PostLiked, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-PostLiked.belongsTo(User);
+PostLiked.belongsTo(User, { foreignKey: "user_id" });
 
 User.hasMany(PostDisliked, {
   foreignKey: "user_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-PostDisliked.belongsTo(User);
+PostDisliked.belongsTo(User, { foreignKey: "user_id" });
 
 User.hasMany(Comment, {
   foreignKey: "user_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-Comment.belongsTo(User);
+Comment.belongsTo(User, { foreignKey: "user_id" });
 
-User.hasOne(Moderator, {
+User.hasMany(Moderator, {
   foreignKey: "user_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-Moderator.belongsTo(User);
+Moderator.belongsTo(User, { foreignKey: "user_id" });
 
 module.exports = User;

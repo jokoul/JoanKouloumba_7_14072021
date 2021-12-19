@@ -10,7 +10,6 @@ const PostLiked = require("../models/PostLiked");
 const PostDisliked = require("../models/PostDisliked");
 const PostModerated = require("../models/PostModerated");
 const User = require("../models/User");
-const PostModerated = require("../models/PostModerated");
 
 //Définition et exportation des fonctions callback
 exports.getAllPost = (req, res, next) => {
@@ -18,7 +17,7 @@ exports.getAllPost = (req, res, next) => {
     where: {
       //On récupère tous les post de la table Post dont l'id n'est pas dans la colonne "post_id" de la table PostModerateds
       post_id: {
-        [Op.notIn]: sequelize.literal(`SELECT post_id FROM PostModerated`), //nom de table non pluraliser dû au type d'association "hasOne"
+        [Op.notIn]: sequelize.literal(`(SELECT post_id FROM PostModerateds)`),
       },
     },
     include: [

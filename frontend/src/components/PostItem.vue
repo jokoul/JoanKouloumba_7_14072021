@@ -8,7 +8,7 @@
       class="postCreate__uploadImg"
     />
     <div class="postCreate__formRow">
-      <!--<p>Bonjour {{ getFirstname }}</p>-->
+      <p>Bonjour {{ getFirstname }}</p>
       <input
         class="postCreate__formRow__input"
         type="text"
@@ -34,13 +34,13 @@
 </template>
 
 <script>
-//import { mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "PostItem",
   props: {},
   computed: {
-    //...mapGetters(["getFirstname"]),
+    ...mapGetters(["getFirstname"]),
   },
   data() {
     return {

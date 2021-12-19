@@ -29,6 +29,6 @@ Comment.hasOne(CommentModerated, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-CommentModerated.belongsTo(Comment);
+CommentModerated.belongsTo(Comment, { foreignKey: "comment_id" });
 
 module.exports = Comment;

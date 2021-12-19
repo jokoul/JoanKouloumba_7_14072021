@@ -19,7 +19,7 @@ const cors = require("cors");
 const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
 const commentRoutes = require("./routes/comment");
-const countRoutes = require("./routes/count");
+const countRoutes = require("./routes/counter");
 //Importation du fichier de configuration de la BD
 const sequelize = require("./config/sequelizeDb");
 
@@ -29,7 +29,7 @@ sequelize
   .then(() => {
     sequelize
       .sync()
-      .then(() => console.log("The models are sucessfully synchronized"))
+      .then(() => console.log("The models are sucessfully synchronized !"))
       .catch((error) => console.log(error));
   })
   .catch((error) =>
@@ -52,6 +52,6 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/auth", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
-app.use("/api/count", countRoutes);
+app.use("/api/counters", countRoutes);
 
 module.exports = app;

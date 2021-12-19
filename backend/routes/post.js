@@ -12,6 +12,6 @@ router.post("/", auth, multer.post, postCtrl.createPost);
 router.put("/:post_id", auth, multer.post, postCtrl.modifyPost);
 router.delete("/:post_id", auth, postCtrl.deletePost);
 router.post("/:post_id/like", auth, postCtrl.modifyLikePost);
-router.get("/:post_id/moderate", auth, postCtrl.moderatePost);
+router.post("/:post_id/moderate", auth, postCtrl.moderatePost);
 
 module.exports = router;

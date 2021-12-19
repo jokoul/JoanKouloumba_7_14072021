@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 //Importation du package "fs" qui permet d'accéder aux opérations liés au système de fichier.
 const fs = require("fs");
 const User = require("../models/User");
-const Moderator = require("../models/User");
+const Moderator = require("../models/Moderator");
 //importation de dotenv pour l'utilisation des variables d'environnement.
 require("dotenv").config();
 const secretKey = process.env.TOKEN_SECRET_KEY;

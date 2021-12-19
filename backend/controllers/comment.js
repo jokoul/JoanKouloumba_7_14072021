@@ -14,7 +14,11 @@ exports.getAllComment = (req, res, next) => {
   Comment.findAll({
     where: {
       post_id: postId,
-      [Op.notIn]: sequelize.literal("SELECT comment_id FROM CommentModerateds"),
+      comment_id: {
+        [Op.notIn]: sequelize.literal(
+          "(SELECT comment_id FROM CommentModerateds)"
+        ),
+      },
     },
     include: [
       {

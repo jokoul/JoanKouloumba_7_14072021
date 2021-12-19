@@ -29,7 +29,6 @@ export default createStore({
   state: {
     status: "",
     user: user,
-    firstname: "Joan",
     userInfos: {
       firstname: "Joan",
       lastname: "",
