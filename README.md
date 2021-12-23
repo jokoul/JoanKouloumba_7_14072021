@@ -20,3 +20,11 @@ Alors, taper dans votre SGBD la requête SQL suivante :
 b)Lancer le server backend en effectuant : `nodemon server` ou `node server` selon si vous avez installé nodemon ou pas. (moi : avec nodemon)
 
 ## Frontend
+
+1. Installation :
+
+A partir du dossier `frontend`, faire `npm install`
+
+2. Lancement :
+
+Taper la commande `npm run serve`

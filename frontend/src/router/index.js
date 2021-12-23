@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import LogSign from "../views/LogSign.vue";
 import HomeView from "../views/HomeView.vue";
 import UserSetting from "../views/UserSetting.vue";
+import OneView from "../views/OneView.vue";
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     path: "/setting",
     name: "UserSetting",
     component: UserSetting,
+  },
+  {
+    path: "/edit/:post_id",
+    name: "OneView",
+    component: OneView,
   },
 ];
 

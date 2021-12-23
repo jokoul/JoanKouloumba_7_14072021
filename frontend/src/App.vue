@@ -1,6 +1,7 @@
 <template>
   <div>
     <router-view></router-view>
+
     <footer class="footer">
       <p>Groupomania © 2021</p>
     </footer>

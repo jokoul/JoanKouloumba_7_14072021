@@ -1,6 +1,6 @@
 <template>
   <!--<div>TEST</div>-->
-  <div class="postCreate">
+  <form class="postCreate" v-on:submit="createPost()">
     <img
       v-if="item.imageUrl"
       :src="item.imageUrl"
@@ -8,8 +8,8 @@
       class="postCreate__uploadImg"
     />
     <div class="postCreate__formRow">
-      <p>Bonjour {{ getFirstname }}</p>
       <input
+        v-model="post_text"
         class="postCreate__formRow__input"
         type="text"
         name="postCreate"
@@ -27,34 +27,70 @@
       />
     </div>
     <div class="postCreate__button">
-      <button class="btn postCreate__button__poster col-2 m-1">Publier</button>
-      <button class="btn postCreate__button__cancel col-2 m-1">Annuler</button>
+      <input
+        type="submit"
+        class="btn postCreate__button__poster col-2 m-1"
+        value="Publier"
+      />
+      <input
+        class="btn postCreate__button__cancel col-2 m-1"
+        type="reset"
+        value="Annuler"
+        @click="eraseImg()"
+      />
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import axios from "axios";
 
 export default {
   name: "PostItem",
   props: {},
-  computed: {
-    ...mapGetters(["getFirstname"]),
-  },
+  computed: {},
   data() {
     return {
+      post_text: "",
       item: {
         image: null,
         imageUrl: null,
       },
+      userId: this.$store.state.user.userId,
+      token: this.$store.state.user.token,
     };
   },
   methods: {
     uploadImage(event) {
       const file = event.target.files[0];
-      this.image = file;
+      this.item.image = file;
       this.item.imageUrl = URL.createObjectURL(file);
+    },
+    eraseImg() {
+      //On reset la clé imageUrl afin d'enlever l'image dans le postCreate
+      this.item.imageUrl = null;
+    },
+    createPost() {
+      //L'interface FormData permet de construire un ensemble de paires clé/valeur représentant les champs du formulaire et leurs valeurs, qui peuvent ensuite être facilement envoyées en utilisant la méthode XMLHttpRequest.send()
+      const formData = new FormData();
+      const file = this.item.image;
+
+      formData.append("image_url", file, file.name);
+      formData.append("post_text", this.post_text);
+      formData.append("user_id", this.userId);
+
+      const instance = axios.create({
+        baseURL: "http://localhost:3000/api",
+      });
+      instance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${this.token}`;
+      instance
+        .post("/posts/", formData)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => console.log(error));
     },
   },
 };
@@ -78,7 +114,7 @@ $tertiary_color--clear: #b9fdb9ed;
   border: 0.2rem solid $secondary_color;
   border-radius: 1rem;
   box-shadow: 0 0 1.5rem $primary_color;
-  margin: 1rem auto;
+  margin: 0.5rem auto;
   padding: 0.5rem;
   width: 80%;
   &__uploadImg {
@@ -89,8 +125,9 @@ $tertiary_color--clear: #b9fdb9ed;
   }
   &__formRow {
     &__input {
-      margin: 1rem auto;
+      margin: 0.5rem auto;
       font-size: 1rem;
+      min-width: 9rem;
       @include dimension($width: 70%, $height: 2rem);
     }
     &__input::placeholder {
@@ -108,6 +145,7 @@ $tertiary_color--clear: #b9fdb9ed;
       color: white;
       @media screen and (max-width: 770px) {
         padding: 0.1rem;
+        min-width: 4rem;
       }
     }
     &__cancel {
@@ -115,6 +153,7 @@ $tertiary_color--clear: #b9fdb9ed;
       color: white;
       @media screen and (max-width: 770px) {
         padding: 0.1rem;
+        min-width: 4rem;
       }
     }
   }

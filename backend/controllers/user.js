@@ -60,12 +60,11 @@ exports.login = (req, res, next) => {
 
 exports.getAccount = (req, res, next) => {
   const userId = req.params.user_id;
-  User.findOne({ where: { user_id: userId } }).then((user) => {
-    res
-      .status(200)
-      .json({ user })
-      .catch((error) => res.status(400).json({ error }));
-  });
+  User.findOne({ where: { user_id: userId } })
+    .then((user) => {
+      res.status(200).json({ user });
+    })
+    .catch((error) => res.status(400).json({ error }));
 };
 
 exports.modifyAccount = (req, res, next) => {

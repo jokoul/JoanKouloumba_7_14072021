@@ -11,9 +11,9 @@
         <router-link to="/home" class="header__nav__link"
           ><i class="fas fa-home"></i> Accueil</router-link
         >
-        <router-link to="/" class="header__nav__link"
-          ><i class="fas fa-sign-out-alt"></i> Déconnexion</router-link
-        >
+        <button @click="logout()" class="header__nav__link btn">
+          <i class="fas fa-sign-out-alt"></i> Déconnexion
+        </button>
       </nav>
     </header>
   </div>
@@ -24,6 +24,12 @@ export default {
   name: "HeaderComp",
   props: {},
   computed: {},
+  methods: {
+    logout() {
+      this.$store.commit("USER_LOGOUT");
+      this.$router.push("/");
+    },
+  },
 };
 </script>
 
@@ -42,7 +48,7 @@ $tertiary_color--clear: #b9fdb9ed;
   align-items: $align;
 }
 .header {
-  @include dimension($width: 100%, $height: 5.5rem);
+  @include dimension($width: 100%, $height: 4rem);
   @include flexbox($display: flex, $justify: space-between, $align: center);
   flex-wrap: wrap;
   @media screen and (max-width: 770px) {

@@ -3,7 +3,7 @@ import axios from "axios";
 
 //Définition de l'url de base pour les requête vers mon API backend
 const instance = axios.create({
-  baseURL: "http://localhost:8080/",
+  baseURL: "http://localhost:3000/api",
 });
 
 let user = localStorage.getItem("user");
@@ -15,7 +15,7 @@ if (!user) {
 } else {
   try {
     user = JSON.parse(user);
-    instance.defaults.headers.common["Authorization"] = user.token;
+    instance.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
   } catch (ex) {
     user = {
       userId: -1,
@@ -30,49 +30,99 @@ export default createStore({
     status: "",
     user: user,
     userInfos: {
-      firstname: "Joan",
+      firstname: "",
       lastname: "",
       email: "",
       password: "",
+      profil: "",
     },
   },
   getters: {
-    getFirstname() {
-      return this.$store.state.userInfos.firstname;
+    //Pour afficher firstname dans les composant
+    getFirstname(state) {
+      return state.userInfos.firstname;
+    },
+    getProfil(state) {
+      return state.userInfos.profil;
+    },
+    getUser(state) {
+      return state.user;
     },
   },
   mutations: {
     //Les mutations Vuex sont synchrones et permet de modifier le state.
-    SETSTATUS(state, status) {
+    SET_STATUS(state, status) {
       //On modifie le "status" du state à partir de celui passé en payload
       state.status = status;
     },
-    USERLOG(state, user) {
+    USER_LOGIN(state, user) {
       //On accède au localStorage et on crée l'objet "user"
       localStorage.setItem("user", JSON.stringify(user));
       //On remet à jour le "user" dans le state à partir du localStorage.
       state.user = user;
     },
-    USERINFOS(state, userInfos) {
+    USER_LOGOUT(state) {
+      state.user = {
+        userId: -1,
+        token: "",
+      };
+      (state.userInfos = {
+        firstname: "",
+        lastname: "",
+        email: "",
+        password: "",
+        profil: "",
+      }),
+        (state.posts = []),
+        localStorage.removeItem("user");
+    },
+    USER_INFOS(state, userInfos) {
       //On modifie le "userInfos" du state à partir de celui du payload
       state.userInfos = userInfos;
     },
   },
   actions: {
     //Les actions sont asynchrone et permettent de récupérer les données API.
-    login({ commit }, USERINFOS) {
-      //On crée une "promise" pour gérer notre code asynchrone
+    createAccount({ commit }, USER_INFOS) {
+      //On invoque notre mutation 'SETSTATUS' avec un payload
+      commit("SET_STATUS", "loading");
       return new Promise((resolve, reject) => {
+        //...
         instance
-          .post("auth/login", USERINFOS)
+          .post("/auth/register", USER_INFOS)
           .then(function (response) {
-            commit("SETSTATUS", "");
-            //On invoque notre mutation 'USERLOG' avec un payload
-            commit("USERLOG", response.data);
+            commit("SET_STATUS", "created");
             resolve(response);
           })
           .catch(function (error) {
-            commit("SETSTATUS", "error_login");
+            commit("SET_STATUS", "error_create");
+            reject(error);
+          });
+      });
+    },
+
+    login({ commit }, USER_INFOS) {
+      //On crée une "promise" pour gérer notre code asynchrone
+      return new Promise((resolve, reject) => {
+        instance
+          .post("/auth/login", USER_INFOS)
+          .then(function (response) {
+            commit("SET_STATUS", "");
+            //On invoque notre mutation 'USERLOGIN' avec un payload qui contient userId et le token en provenance du backend.
+            commit("USER_LOGIN", response.data);
+            new Promise((resolve, reject) => {
+              instance
+                .get(`/auth/accounts/${user.userId}`)
+                .then((res) => {
+                  commit("USER_INFOS", res.data.user);
+                  resolve(res);
+                })
+                .catch((error) => reject(error));
+            });
+            resolve(response);
+          })
+          .catch(function (error) {
+            commit("SET_STATUS", "error_login");
             reject(error);
             setTimeout(() => {
               window.location.reload();
@@ -80,21 +130,16 @@ export default createStore({
           });
       });
     },
-    createAccount({ commit }, USERINFOS) {
-      //On invoque notre mutation 'SETSTATUS' avec un payload
-      commit("SETSTATUS", "loading");
+
+    getUserInfos({ commit }) {
       return new Promise((resolve, reject) => {
-        //...
         instance
-          .post("auth/signup", USERINFOS)
-          .then(function (response) {
-            commit("SETSTATUS", "created");
-            resolve(response);
+          .get(`/auth/accounts/${user.userId}`)
+          .then((res) => {
+            commit("USER_INFOS", res.data.user);
+            resolve(res);
           })
-          .catch(function (error) {
-            commit("SETSTATUS", "error_create");
-            reject(error);
-          });
+          .catch((error) => reject(error));
       });
     },
   },

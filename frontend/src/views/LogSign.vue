@@ -13,27 +13,27 @@
       <h1>Welcome to Grouponania social network</h1>
       <p>Join our community and share your passion with us</p>
     </div>
-    <div class="card">
-      <div class="card__btn">
+    <div class="cardContainer">
+      <div class="cardContainer__btn">
         <div
           @click="toggleToLogin()"
-          class="card__btn__login"
+          class="cardContainer__btn__login"
           :class="{ btn_active: formToggle1 }"
         >
           Connexion
         </div>
         <div
           @click="toggleToSignup()"
-          class="card__btn__signup"
+          class="cardContainer__btn__signup"
           :class="{ btn_active: formToggle2 }"
         >
           Création de compte
         </div>
       </div>
-      <div class="card__form">
-        <div v-if="mode == 'create'" class="card__form__row">
+      <div class="cardContainer__form">
+        <div v-if="mode == 'create'" class="cardContainer__form__row">
           <input
-            class="card__form__input"
+            class="cardContainer__form__input"
             v-model="firstname"
             type="firstname"
             name="firstname"
@@ -42,15 +42,15 @@
             required
           />
           <p
-            class="card__form__row__errorFormat"
+            class="cardContainer__form__row__errorFormat"
             v-if="checkFirstname == 'invalideFirstname'"
           >
             Veuillez saisir votre prénom
           </p>
         </div>
-        <div v-if="mode == 'create'" class="card__form__row">
+        <div v-if="mode == 'create'" class="cardContainer__form__row">
           <input
-            class="card__form__input"
+            class="cardContainer__form__input"
             v-model="lastname"
             type="lastname"
             name="lastname"
@@ -59,15 +59,15 @@
             required
           />
           <p
-            class="card__form__row__errorFormat"
+            class="cardContainer__form__row__errorFormat"
             v-if="checkLastname == 'invalideLastname'"
           >
             Veuillez saisir votre nom
           </p>
         </div>
-        <div class="card__form__row">
+        <div class="cardContainer__form__row">
           <input
-            class="card__form__input"
+            class="cardContainer__form__input"
             v-model="email"
             type="email"
             name="email"
@@ -76,21 +76,21 @@
             required
           />
           <p
-            class="card__form__row__errorFormat"
+            class="cardContainer__form__row__errorFormat"
             v-if="checkEmail == 'invalideEmail'"
           >
             Veuillez saisir votre Adresse mail
           </p>
         </div>
         <p
-          class="card__form__error"
+          class="cardContainer__form__error"
           v-if="mode == 'create' && status == 'error__create'"
         >
           L'adresse mail est déjà utilisé
         </p>
-        <div class="card__form__row">
+        <div class="cardContainer__form__row">
           <input
-            class="card__form__input"
+            class="cardContainer__form__input"
             v-model="password"
             type="password"
             name="password"
@@ -99,13 +99,13 @@
             required
           />
           <p
-            class="card__form__row__errorFormat"
+            class="cardContainer__form__row__errorFormat"
             v-if="checkPassword == 'invalidePassword'"
           >
             Veuillez saisir un mot de passe au bon format!
           </p>
           <p
-            class="card__form__row__errorFormat"
+            class="cardContainer__form__row__errorFormat"
             v-if="regexPassword == 'invalideRegexPass'"
           >
             Le mot de passe doit faire au moins 8 caractères sans signes
@@ -113,17 +113,17 @@
           </p>
         </div>
         <p
-          class="card__form__error"
+          class="cardContainer__form__error"
           v-if="mode == 'login' && status == 'error_login'"
         >
           Adresse mail et / ou mot de passe non reconnu !
         </p>
-        <div class="card__form__row">
+        <div class="cardContainer__form__row">
           <button
             v-if="mode == 'create'"
             @click="createAccount()"
-            class="card__form__submit button"
-            :class="{ 'button--disabled': !filledFields }"
+            class="cardContainer__form__submit btn"
+            :class="{ 'btn--disabled': !filledFields }"
             :disabled="!filledFields"
             type="button"
           >
@@ -133,8 +133,8 @@
           <button
             v-else
             v-on:click="login()"
-            class="card__form__submit button"
-            :class="{ 'button--disabled': !filledFields }"
+            class="cardContainer__form__submit btn"
+            :class="{ 'btn--disabled': !filledFields }"
             :disabled="!filledFields"
             type="button"
           >
@@ -208,25 +208,9 @@ export default {
       this.formToggle1 = false;
       this.formToggle2 = true;
     },
-    login() {
-      const self = this;
-      //La méthode "dispath" permet de propager notre action "login" dans le store avec un payload
-      this.$store
-        .dispatch("login", {
-          email: this.email,
-          password: this.password,
-        })
-        .then(
-          function () {
-            //On accède au router et on redirrige vers la route "home" avec la méthode "push"
-            self.$router.push("/home");
-          },
-          function (error) {
-            console.log(error);
-          }
-        );
-    },
+
     createAccount() {
+      //on vérifie d'abord nos champs
       const self = this;
       if (!this.firstname) {
         this.checkFirstname = "invalideFirstname";
@@ -248,6 +232,7 @@ export default {
         this.email &&
         this.validateRegexPass(this.password)
       ) {
+        //si tous les champs sont validé alors on propage l'action du store "createAccount" en lui passant en payload la valeur des champs.
         this.$store
           .dispatch("createAccount", {
             firstname: this.firstname,
@@ -265,6 +250,28 @@ export default {
           );
       }
     },
+
+    login() {
+      const self = this;
+      //La méthode "dispath" permet de propager notre action "login" dans le store avec un payload
+      this.$store
+        .dispatch("login", {
+          email: this.email,
+          password: this.password,
+        })
+        .then(
+          //si la fonction "login" du store.action s'est bien effectué
+          function () {
+            //On accède au router et on redirrige vers la route "home" avec la méthode "push"
+            self.$router.push("/home");
+          },
+          //si la fonction "login" du store.action ne s'est pas effectué
+          function (error) {
+            console.log(error);
+          }
+        );
+    },
+
     validateRegexPass(password) {
       const regex = /^[a-zA-Z0-9éèêàîïôöûü.!_-]{8,}$/;
       return regex.test(password);
@@ -299,7 +306,7 @@ $tertiary_color--clear: #88ec88;
   margin: 3rem 0;
   color: $tertiary_color;
 }
-.card {
+.cardContainer {
   &__btn {
     @include flexbox($display: flex, $justify: center, $align: center);
     @media screen and (max-width: 770px) {
@@ -371,7 +378,7 @@ $tertiary_color--clear: #88ec88;
   border-radius: 1rem;
   font-weight: 600;
 }
-.button--disabled {
+.btn--disabled {
   opacity: 0.5;
 }
 </style>
