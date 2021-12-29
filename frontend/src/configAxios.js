@@ -30,3 +30,22 @@ if (!user) {
 }
 
 export default axios;
+
+/*
+const HTTP = axios.create({
+  baseURL: `http://127.0.0.1:3000/api/`,
+});
+
+HTTP.interceptors.request.use(
+  (config) => {
+    let token = store.state.token;
+    if (token != null) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  } 
+);
+*/

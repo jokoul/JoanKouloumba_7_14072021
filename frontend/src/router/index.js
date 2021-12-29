@@ -4,6 +4,11 @@ import HomeView from "../views/HomeView.vue";
 import UserSetting from "../views/UserSetting.vue";
 import OneView from "../views/OneView.vue";
 
+/*if(this){
+  //regarder la doc 
+  router.beforeEach((to, from, next)
+}*/
+
 const routes = [
   {
     path: "/",

@@ -33,7 +33,6 @@ export default createStore({
       firstname: "",
       lastname: "",
       email: "",
-      password: "",
       profil: "",
     },
   },
@@ -47,6 +46,9 @@ export default createStore({
     },
     getUser(state) {
       return state.user;
+    },
+    getUserAccount(state) {
+      return state.userInfos;
     },
   },
   mutations: {
@@ -62,19 +64,9 @@ export default createStore({
       state.user = user;
     },
     USER_LOGOUT(state) {
-      state.user = {
-        userId: -1,
-        token: "",
-      };
-      (state.userInfos = {
-        firstname: "",
-        lastname: "",
-        email: "",
-        password: "",
-        profil: "",
-      }),
-        (state.posts = []),
-        localStorage.removeItem("user");
+      state.user = null;
+      state.userInfos = null;
+      localStorage.removeItem("user");
     },
     USER_INFOS(state, userInfos) {
       //On modifie le "userInfos" du state à partir de celui du payload

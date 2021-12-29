@@ -124,7 +124,6 @@
             @click="createAccount()"
             class="cardContainer__form__submit btn"
             :class="{ 'btn--disabled': !filledFields }"
-            :disabled="!filledFields"
             type="button"
           >
             <span v-if="status == 'loading'">Création en cours...</span>
@@ -134,7 +133,6 @@
             v-else
             v-on:click="login()"
             class="cardContainer__form__submit btn"
-            :class="{ 'btn--disabled': !filledFields }"
             :disabled="!filledFields"
             type="button"
           >

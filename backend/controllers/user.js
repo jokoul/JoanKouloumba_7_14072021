@@ -27,11 +27,12 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-  User.findOne({
-    where: {
-      email: req.body.email,
-    },
-  })
+  User.scope("withPassword")
+    .findOne({
+      where: {
+        email: req.body.email,
+      },
+    })
     .then((user) => {
       if (!user) {
         return res
@@ -109,6 +110,10 @@ exports.deleteAccount = (req, res, next) => {
             .then(() => res.status(200).json({ message: "Compte supprimé !" }))
             .catch((error) => res.status(400).json({ error }));
         });
+      } else {
+        User.destroy({ where: { user_id: userId } })
+          .then(() => res.status(200).json({ message: "Compte supprimé !" }))
+          .catch((error) => res.status(400).json({ error }));
       }
     })
     .catch((error) => res.status(400).json({ error }));

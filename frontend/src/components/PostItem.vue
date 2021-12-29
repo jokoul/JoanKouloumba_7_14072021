@@ -1,6 +1,6 @@
 <template>
   <!--<div>TEST</div>-->
-  <form class="postCreate" v-on:submit="createPost()">
+  <form class="postCreate" v-on:submit.prevent="createPost()">
     <img
       v-if="item.imageUrl"
       :src="item.imageUrl"
@@ -15,6 +15,7 @@
         name="postCreate"
         id="postCreate"
         placeholder="Dis moi tout"
+        autofocus
       />
     </div>
     <div class="postCreate__formRow">
@@ -52,6 +53,7 @@ export default {
   data() {
     return {
       post_text: "",
+      reRenderComp: 0,
       item: {
         image: null,
         imageUrl: null,
@@ -89,6 +91,8 @@ export default {
         .post("/posts/", formData)
         .then((res) => {
           console.log(res);
+          this.reRenderComp++;
+          this.$emit("reload", this.reRenderComp);
         })
         .catch((error) => console.log(error));
     },
@@ -114,7 +118,7 @@ $tertiary_color--clear: #b9fdb9ed;
   border: 0.2rem solid $secondary_color;
   border-radius: 1rem;
   box-shadow: 0 0 1.5rem $primary_color;
-  margin: 0.5rem auto;
+  margin: 1.5rem auto;
   padding: 0.5rem;
   width: 80%;
   &__uploadImg {

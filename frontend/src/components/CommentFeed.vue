@@ -32,12 +32,14 @@
         <div class="comments__comment__info__buttons col-sm-3 col-12">
           <button
             v-if="comment.user_id == getUser.userId || moderator"
+            @click="deleteComment(comment.comment_id)"
             class="btn btn-delete comments__comment__info__buttons__btn"
           >
             <i class="fas fa-trash-alt"></i><i class="far fa-trash-alt"></i>
           </button>
           <button
             v-if="moderator"
+            @click="moderateComment(comment.comment_id)"
             class="btn btn-warning comments__comment__info__buttons__btn"
           >
             modérer
@@ -84,9 +86,45 @@ export default {
         return `Modifié le ${newDate}`;
       }
     },
+    moderateComment(commentId) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const instance = axios.create({
+        baseURL: "http://localhost:3000/api",
+      });
+      console.log(this.moderator);
+      instance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${user.token}`;
+      instance
+        .post(`/comments/${commentId}/moderate`, {
+          moderate: this.moderator,
+        })
+        .then((res) => {
+          console.log(res);
+          this.$emit("reload");
+        })
+        .catch((error) => console.log(error));
+    },
+    deleteComment(commentId) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const instance = axios.create({
+        baseURL: "http://localhost:3000/api",
+      });
+      console.log(this.moderator);
+      instance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${user.token}`;
+      instance
+        .delete(`/comments/${commentId}`)
+        .then(() => {
+          this.$emit("reload");
+        })
+        .catch((error) => console.log(error));
+    },
   },
   mounted() {
     console.log(this.post_id);
+    console.log(this.comments);
   },
   created() {
     const user = JSON.parse(localStorage.getItem("user"));

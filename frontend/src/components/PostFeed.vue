@@ -48,6 +48,7 @@
             </button>
             <button
               v-if="moderator"
+              v-on:click="moderatePost(post.post_id)"
               class="btn btn-warning card__post__info__buttons__btn"
             >
               Modérer
@@ -65,6 +66,8 @@
         <comment-feed
           :post_id="post.post_id"
           v-bind:moderator="moderator"
+          @reload="reRenderComp++"
+          :key="reRenderComp"
         ></comment-feed>
       </div>
     </article>
@@ -94,6 +97,7 @@ export default {
       moderator: false,
       deletePostId: "",
       modalActive: false,
+      reRenderComp: 0,
     };
   },
   computed: {
@@ -136,7 +140,27 @@ export default {
         .delete(`/posts/${postId}`)
         .then((res) => {
           console.log(res);
-          window.location.reload();
+          this.reRenderComp++;
+          this.$emit("reload", this.reRenderComp);
+        })
+        .catch((error) => console.log(error));
+    },
+    moderatePost(postId) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const instance = axios.create({
+        baseURL: "http://localhost:3000/api",
+      });
+      instance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${user.token}`;
+      instance
+        .post(`/posts/${postId}/moderate`, {
+          moderate: this.moderator,
+        })
+        .then((res) => {
+          console.log(res);
+          this.reRenderComp++;
+          this.$emit("reload", this.reRenderComp);
         })
         .catch((error) => console.log(error));
     },
@@ -154,6 +178,7 @@ export default {
         console.log(this.posts);
       })
       .catch((error) => console.log(error));
+    //On vérifie si l'ID utilisateur est dans la table modérateur
     instance
       .get(`/auth/moderator/${user.userId}`)
       .then((res) => {
@@ -180,9 +205,10 @@ $tertiary_color--clear: #b9fdb9ed;
   align-items: $align;
 }
 .card {
-  margin: 0.5rem auto;
+  margin: 1rem auto;
   padding: 0.2rem;
   width: 80%;
+  box-shadow: 0 0 2rem grey;
   &__post {
     &__info {
       @media screen and (min-width: 770px) {

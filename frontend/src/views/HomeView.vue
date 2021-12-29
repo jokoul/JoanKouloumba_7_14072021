@@ -2,22 +2,24 @@
   <div class="home">
     <header-comp id="nav"></header-comp>
     <div class="title">
-      <img
-        v-if="getProfil"
-        class="title__img"
-        :src="getProfil"
-        :alt="getFirstname"
-      />
-      <img
-        v-else
-        class="title__img"
-        src="../assets/avatar_default.png"
-        :alt="getFirstname"
-      />
+      <router-link to="/setting">
+        <img
+          v-if="getProfil"
+          class="title__img"
+          :src="getProfil"
+          :alt="getFirstname"
+        />
+        <img
+          v-else
+          class="title__img"
+          src="../assets/avatar_default.png"
+          :alt="getFirstname"
+        />
+      </router-link>
       <h1 class="title__hello">Bonjour {{ getFirstname }}</h1>
     </div>
-    <post-item></post-item>
-    <post-feed></post-feed>
+    <post-item :key="reRender" @reload="updateComp" autofocus></post-item>
+    <post-feed :key="reRender" @reload="updateComp"></post-feed>
   </div>
 </template>
 
@@ -35,7 +37,9 @@ export default {
     PostFeed,
   },
   data() {
-    return {};
+    return {
+      reRender: 0,
+    };
   },
   computed: {
     getFirstname() {
@@ -43,9 +47,13 @@ export default {
     },
     ...mapGetters(["getProfil"]),
   },
-  methods: {},
+  methods: {
+    updateComp(reRenderModerate) {
+      this.reRender = reRenderModerate;
+    },
+  },
   created() {},
-  beforeMount() {
+  beforeCreate() {
     //on propage notre action 'getUserInfos'
     this.$store.dispatch("getUserInfos");
   },
