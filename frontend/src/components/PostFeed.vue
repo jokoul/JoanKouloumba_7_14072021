@@ -62,7 +62,14 @@
           :alt="post.post_text"
         />
       </div>
-      <div class="card_comments">
+      <div class="card__react">
+        <react-feed
+          :post_id="post.post_id"
+          @reload="reRenderComp++"
+          :key="reRenderComp"
+        ></react-feed>
+      </div>
+      <div class="card__comments">
         <comment-feed
           :post_id="post.post_id"
           v-bind:moderator="moderator"
@@ -84,12 +91,14 @@ import axios from "axios";
 import CommentFeed from "./CommentFeed.vue";
 import { mapGetters } from "vuex";
 import ModalPostDelete from "./ModalPostDelete.vue";
+import ReactFeed from "./ReactFeed.vue";
 
 export default {
   name: "PostFeed",
   components: {
     CommentFeed,
     ModalPostDelete,
+    ReactFeed,
   },
   data() {
     return {

@@ -54,6 +54,9 @@ $tertiary_color--clear: #b9fdb9ed;
   @media screen and (max-width: 770px) {
     @include flexbox($display: flex, $justify: center, $align: center);
     flex-direction: column;
+    height: 10rem;
+  }
+  @media screen and (max-width: 500px) {
     height: 12rem;
   }
   box-shadow: 0 0.5rem 1.5rem $primary_color;
