@@ -1,14 +1,21 @@
 <template>
   <div class="react">
     <div class="react__buttons">
-      <button @click="reactLike()" class="btn react__buttons__btn btn-like">
-        <i class="fas fa-thumbs-up"></i><i class="far fa-thumbs-up"></i>
+      <button
+        @click="reactLike()"
+        class="btn react__buttons__btn btn-like"
+        v-bind:class="{ userLike: IsLiked }"
+        :disabled="likeActive"
+      >
+        <i class="far fa-thumbs-up"></i> <span> {{ counterLike }}</span>
       </button>
       <button
         @click="reactDislike()"
         class="btn react__buttons__btn btn-dislike"
+        v-bind:class="{ userDislike: IsDisliked }"
+        :disabled="dislikeActive"
       >
-        <i class="fas fa-thumbs-down"></i><i class="far fa-thumbs-down"></i>
+        <i class="far fa-thumbs-down"></i> <span> {{ counterDislike }}</span>
       </button>
     </div>
     <form class="react__form" @submit.prevent="reactComment()">
@@ -38,6 +45,10 @@ export default {
       like: 0,
       IsLiked: false,
       IsDisliked: false,
+      likeActive: false,
+      dislikeActive: false,
+      counterLike: 0,
+      counterDislike: 0,
     };
   },
   computed: {
@@ -63,6 +74,131 @@ export default {
         })
         .catch((error) => console.log(error));
     },
+    reactLike() {
+      if (this.IsLiked == false) {
+        this.IsLiked = true;
+        this.like = 1;
+        this.dislikeActive = true;
+        const user = JSON.parse(localStorage.getItem("user"));
+        const instance = axios.create({
+          baseURL: "http://localhost:3000/api",
+        });
+        instance.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${user.token}`;
+        instance
+          .post(`/posts/${this.post_id}/like`, {
+            like: this.like,
+            user_id: this.getUser.userId,
+          })
+          .then((res) => {
+            this.$emit("reload");
+            console.log(res);
+          })
+          .catch((error) => console.log(error));
+      } else {
+        this.IsLiked = false;
+        this.like = 0;
+        this.dislikeActive = false;
+        const user = JSON.parse(localStorage.getItem("user"));
+        const instance = axios.create({
+          baseURL: "http://localhost:3000/api",
+        });
+        instance.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${user.token}`;
+        instance
+          .post(`/posts/${this.post_id}/like`, {
+            like: this.like,
+            user_id: this.getUser.userId,
+          })
+          .then((res) => {
+            this.$emit("reload");
+            console.log(res);
+          })
+          .catch((error) => console.log(error));
+      }
+    },
+    reactDislike() {
+      if (this.IsDisliked == false) {
+        this.IsDisliked = true;
+        this.like = -1;
+        this.likeActive = true;
+        const user = JSON.parse(localStorage.getItem("user"));
+        const instance = axios.create({
+          baseURL: "http://localhost:3000/api",
+        });
+        instance.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${user.token}`;
+        instance
+          .post(`/posts/${this.post_id}/like`, {
+            like: this.like,
+            user_id: this.getUser.userId,
+          })
+          .then((res) => {
+            this.$emit("reload");
+            console.log(res);
+          })
+          .catch((error) => console.log(error));
+      } else {
+        this.IsDisliked = false;
+        this.like = 0;
+        this.likeActive = false;
+        const user = JSON.parse(localStorage.getItem("user"));
+        const instance = axios.create({
+          baseURL: "http://localhost:3000/api",
+        });
+        instance.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${user.token}`;
+        instance
+          .post(`/posts/${this.post_id}/like`, {
+            like: this.like,
+            user_id: this.getUser.userId,
+          })
+          .then((res) => {
+            this.$emit("reload");
+            console.log(res);
+          })
+          .catch((error) => console.log(error));
+      }
+    },
+  },
+  mounted() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const instance = axios.create({
+      baseURL: "http://localhost:3000/api",
+    });
+    instance.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
+    instance
+      .post(`/counters/like`, {
+        post_id: this.post_id,
+        user_id: this.getUser.userId,
+      })
+      .then((res) => {
+        if (res.data.userLike) {
+          this.dislikeActive = true;
+        }
+        this.IsLiked = res.data.userLike;
+        this.counterLike = res.data.numberOfLike;
+        console.log(res);
+      })
+      .catch((error) => console.log(error));
+    instance
+      .post(`/counters/dislike`, {
+        post_id: this.post_id,
+        user_id: this.getUser.userId,
+      })
+      .then((res) => {
+        if (res.data.userDislike) {
+          this.likeActive = true;
+        }
+        this.IsDisliked = res.data.userDislike;
+        this.counterDislike = res.data.numberOfDislike;
+        console.log(res);
+      })
+      .catch((error) => console.log(error));
   },
 };
 </script>
@@ -88,6 +224,12 @@ $tertiary_color--clear: #b9fdb9ed;
     &__btn {
       font-size: 1.3rem;
     }
+    & .btn-like {
+      margin-right: 1rem;
+    }
+    & .btn-dislike {
+      margin-left: 1rem;
+    }
   }
   &__form {
     & .textarea {
@@ -105,5 +247,11 @@ $tertiary_color--clear: #b9fdb9ed;
       margin-left: 0.2rem;
     }
   }
+}
+.userLike {
+  background-color: greenyellow;
+}
+.userDislike {
+  background-color: orange;
 }
 </style>

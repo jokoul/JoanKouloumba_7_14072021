@@ -1,6 +1,6 @@
 <template>
   <div class="comments">
-    <h4 class="comments__title">Commentaires</h4>
+    <h4 class="comments__title">{{ counterComment }} Commentaires :</h4>
     <p v-if="comments.length == 0">Pas de commentaire pour l'instant</p>
     <div
       v-else
@@ -61,6 +61,7 @@ export default {
   data() {
     return {
       comments: [],
+      counterComment: 0,
     };
   },
   component: {},
@@ -123,8 +124,19 @@ export default {
     },
   },
   mounted() {
-    console.log(this.post_id);
-    console.log(this.comments);
+    const user = JSON.parse(localStorage.getItem("user"));
+    const instance = axios.create({
+      baseURL: "http://localhost:3000/api",
+    });
+    instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
+    instance
+      .post(`/counters/comment`, {
+        post_id: this.post_id,
+      })
+      .then((res) => {
+        this.counterComment = res.data.numberOfComment;
+        console.log(res);
+      });
   },
   created() {
     const user = JSON.parse(localStorage.getItem("user"));

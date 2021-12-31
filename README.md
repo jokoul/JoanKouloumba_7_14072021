@@ -28,3 +28,13 @@ A partir du dossier `frontend`, faire `npm install`
 2. Lancement :
 
 Taper la commande `npm run serve`
+
+## Moderator
+
+Pour se connecter en tant que modérateur :
+
+1. Déconnectez-vous du réseau social.
+
+2. faites une requête SQL pour ajouter votre `user_id` dans la table `moderator`.
+
+3. Reconnectez-vous sur le réseau social.
