@@ -169,6 +169,9 @@ $tertiary_color--clear: #b9fdb9ed;
 .comments {
   &__comment {
     margin-bottom: 0.5rem;
+    border: 2px solid $primary_color;
+    border-radius: 1rem;
+    padding: 0.5rem;
     &__info {
       //@include flexbox($display: flex, $justify: space-between, $align: center);
       &__author {

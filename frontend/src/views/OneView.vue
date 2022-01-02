@@ -31,7 +31,7 @@
           v-bind:alt="post.post_text"
         />
       </div>
-      <div class="form card__form">
+      <form class="form card__form">
         <div class="card__form__group">
           <label class="card__form__group__label" for="modifyPost"
             >Modifier le texte de ma publication :</label
@@ -52,7 +52,7 @@
           </button>
           <button class="btn btn-cancel" type="reset">Annuler</button>
         </div>
-      </div>
+      </form>
     </article>
   </div>
 </template>
