@@ -37,6 +37,7 @@
           >
             <i class="fas fa-trash-alt"></i><i class="far fa-trash-alt"></i>
           </button>
+          <span></span>
           <button
             v-if="moderator"
             @click="moderateComment(comment.comment_id)"
@@ -52,7 +53,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "../axios";
 import { mapGetters } from "vuex";
 
 export default {
@@ -88,15 +89,7 @@ export default {
       }
     },
     moderateComment(commentId) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      const instance = axios.create({
-        baseURL: "http://localhost:3000/api",
-      });
-      console.log(this.moderator);
-      instance.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${user.token}`;
-      instance
+      axios
         .post(`/comments/${commentId}/moderate`, {
           moderate: this.moderator,
         })
@@ -107,15 +100,7 @@ export default {
         .catch((error) => console.log(error));
     },
     deleteComment(commentId) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      const instance = axios.create({
-        baseURL: "http://localhost:3000/api",
-      });
-      console.log(this.moderator);
-      instance.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${user.token}`;
-      instance
+      axios
         .delete(`/comments/${commentId}`)
         .then(() => {
           this.$emit("reload");
@@ -124,12 +109,7 @@ export default {
     },
   },
   mounted() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const instance = axios.create({
-      baseURL: "http://localhost:3000/api",
-    });
-    instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
-    instance
+    axios
       .post(`/counters/comment`, {
         post_id: this.post_id,
       })
@@ -139,12 +119,7 @@ export default {
       });
   },
   created() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const instance = axios.create({
-      baseURL: "http://localhost:3000/api",
-    });
-    instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
-    instance.get(`/comments/${this.post_id}`).then((res) => {
+    axios.get(`/comments/${this.post_id}`).then((res) => {
       this.comments = res.data;
       console.log(res.data);
     });
@@ -173,7 +148,6 @@ $tertiary_color--clear: #b9fdb9ed;
     border-radius: 1rem;
     padding: 0.5rem;
     &__info {
-      //@include flexbox($display: flex, $justify: space-between, $align: center);
       &__author {
         text-align: left;
         &__img {
@@ -196,6 +170,58 @@ $tertiary_color--clear: #b9fdb9ed;
     &__text {
       font-weight: 700;
       font-size: 1.1rem;
+      @media screen and (max-width: 576px) {
+        margin-top: 2rem;
+      }
+    }
+  }
+}
+.btn-delete {
+  font-size: 1.8rem;
+  @include dimension($width: 2rem, $height: 2rem);
+  position: absolute;
+  right: 9rem;
+  @media screen and (max-width: 576px) {
+    right: 1rem;
+  }
+  & .far {
+    position: absolute;
+    top: 0rem;
+    right: 0.25rem;
+  }
+  & .fas {
+    position: absolute;
+    top: 0rem;
+    right: 0.25rem;
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: 50% 100%;
+    transition: opacity 0.5s, transform 0.5s;
+  }
+  &:hover {
+    .far {
+      background: linear-gradient(
+        10deg,
+        $tertiary_color 20%,
+        $primary_color 50%,
+        $secondary_color 30%
+      );
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .fas {
+      background: linear-gradient(
+        10deg,
+        $tertiary_color 20%,
+        $primary_color 50%,
+        $secondary_color 30%
+      );
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      opacity: 1;
+      transform: scale(1);
     }
   }
 }

@@ -8,9 +8,9 @@
         <router-link to="/setting" class="header__nav__link">
           <i class="fas fa-user"></i> Compte</router-link
         >
-        <router-link to="/home" class="header__nav__link"
-          ><i class="fas fa-home"></i> Accueil</router-link
-        >
+        <router-link to="/home" class="header__nav__link">
+          <i class="fas fa-home"></i> Accueil
+        </router-link>
         <button @click="logout()" class="header__nav__link btn">
           <i class="fas fa-sign-out-alt"></i> Déconnexion
         </button>
@@ -77,13 +77,13 @@ $tertiary_color--clear: #b9fdb9ed;
       color: $tertiary_color;
       margin-right: 1rem;
       padding: 0.5rem;
-      //transition: transform 0.3s;
+      transition: transform 0.3s;
     }
     &__link:hover {
       background-color: $tertiary_color--clear;
       border-radius: 3rem;
       padding: 0.5rem;
-      //transform: scale(1.1);
+      transform: scale(1.1);
     }
   }
 }

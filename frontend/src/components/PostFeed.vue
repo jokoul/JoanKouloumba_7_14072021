@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "../axios.js";
 import CommentFeed from "./CommentFeed.vue";
 import { mapGetters } from "vuex";
 import ModalPostDelete from "./ModalPostDelete.vue";
@@ -138,14 +138,7 @@ export default {
       console.log(this.deletePostId);
     },
     postDelete(postId) {
-      let user = JSON.parse(localStorage.getItem("user"));
-      const instance = axios.create({
-        baseURL: "http://localhost:3000/api",
-      });
-      instance.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${user.token}`;
-      instance
+      axios
         .delete(`/posts/${postId}`)
         .then((res) => {
           console.log(res);
@@ -155,14 +148,7 @@ export default {
         .catch((error) => console.log(error));
     },
     moderatePost(postId) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      const instance = axios.create({
-        baseURL: "http://localhost:3000/api",
-      });
-      instance.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${user.token}`;
-      instance
+      axios
         .post(`/posts/${postId}/moderate`, {
           moderate: this.moderator,
         })
@@ -175,12 +161,7 @@ export default {
     },
   },
   mounted() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const instance = axios.create({
-      baseURL: "http://localhost:3000/api",
-    });
-    instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
-    instance
+    axios
       .get(`/posts/`)
       .then((res) => {
         this.posts = res.data;
@@ -188,8 +169,8 @@ export default {
       })
       .catch((error) => console.log(error));
     //On vérifie si l'ID utilisateur est dans la table modérateur
-    instance
-      .get(`/auth/moderator/${user.userId}`)
+    axios
+      .get(`/auth/moderator/${this.getUser.userId}`)
       .then((res) => {
         this.moderator = res.data.moderator;
         console.log(res.data);

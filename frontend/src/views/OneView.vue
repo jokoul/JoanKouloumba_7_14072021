@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "../axios";
 import HeaderComp from "../components/HeaderComp.vue";
 export default {
   name: "OneView",
@@ -82,12 +82,7 @@ export default {
     },
   },
   created() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const instance = axios.create({
-      baseURL: "http://localhost:3000/api",
-    });
-    instance.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
-    instance
+    axios
       .get(`/posts/${this.post_id}`)
       .then((res) => {
         this.post = res.data;
@@ -116,14 +111,7 @@ export default {
     },
     modifyPost() {
       const self = this;
-      const user = JSON.parse(localStorage.getItem("user"));
-      const instance = axios.create({
-        baseURL: "http://localhost:3000/api",
-      });
-      instance.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${user.token}`;
-      instance
+      axios
         .put(`/posts/${this.post_id}`, { post_text: this.newPostText })
         .then((res) => {
           console.log(res);

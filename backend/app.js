@@ -4,8 +4,6 @@ const express = require("express");
 //création de l'application express
 const app = express();
 
-const bodyParser = require("body-parser");
-
 //Importation du package "helmet" pour sécuriser l'application contre certaines vulnérabilités.
 const helmet = require("helmet");
 
@@ -37,7 +35,7 @@ sequelize
   );
 
 //middleware permettant de transformer les objets json en objet javascript
-app.use(bodyParser.json());
+app.use(express.json());
 
 //Sécurisation de l'application via l'inclusion d'en-tête configurée (ex: Content-Security-Policy, X-XSS-Protection, X-DNS-Prefetch-Control, Strict-Transport-Security)
 app.use(helmet());

@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "../axios";
 
 export default {
   name: "PostItem",
@@ -81,13 +81,7 @@ export default {
       formData.append("post_text", this.post_text);
       formData.append("user_id", this.userId);
 
-      const instance = axios.create({
-        baseURL: "http://localhost:3000/api",
-      });
-      instance.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${this.token}`;
-      instance
+      axios
         .post("/posts/", formData)
         .then((res) => {
           console.log(res);
@@ -151,6 +145,10 @@ $tertiary_color--clear: #b9fdb9ed;
         padding: 0.1rem;
         min-width: 4rem;
       }
+      transition: transform 0.3s;
+    }
+    &__poster:hover {
+      transform: scale(1.1);
     }
     &__cancel {
       background-color: $secondary_color;
@@ -159,6 +157,10 @@ $tertiary_color--clear: #b9fdb9ed;
         padding: 0.1rem;
         min-width: 4rem;
       }
+      transition: transform 0.3s;
+    }
+    &__cancel:hover {
+      transform: scale(1.1);
     }
   }
 }

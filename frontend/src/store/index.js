@@ -1,29 +1,7 @@
 import { createStore } from "vuex";
-import axios from "axios";
+import axios from "../axios.js";
 
-//Définition de l'url de base pour les requête vers mon API backend
-const instance = axios.create({
-  baseURL: "http://localhost:3000/api",
-});
-
-let user = localStorage.getItem("user");
-if (!user) {
-  user = {
-    userId: -1,
-    token: "",
-  };
-} else {
-  try {
-    user = JSON.parse(user);
-    instance.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
-  } catch (ex) {
-    user = {
-      userId: -1,
-      token: "",
-    };
-  }
-}
-
+let user = JSON.parse(localStorage.getItem("user"));
 //création d'une instance de store
 export default createStore({
   state: {
@@ -38,9 +16,6 @@ export default createStore({
   },
   getters: {
     //Pour afficher firstname dans les composant
-    getFirstname(state) {
-      return state.userInfos.firstname;
-    },
     getProfil(state) {
       return state.userInfos.profil;
     },
@@ -64,9 +39,18 @@ export default createStore({
       state.user = user;
     },
     USER_LOGOUT(state) {
-      state.user = null;
-      state.userInfos = null;
+      state.user = {
+        userId: null,
+        token: "",
+      };
+      state.userInfos = {
+        firstname: "",
+        lastname: "",
+        email: "",
+        profil: "",
+      };
       localStorage.removeItem("user");
+      localStorage.removeItem("name");
     },
     USER_INFOS(state, userInfos) {
       //On modifie le "userInfos" du state à partir de celui du payload
@@ -80,7 +64,7 @@ export default createStore({
       commit("SET_STATUS", "loading");
       return new Promise((resolve, reject) => {
         //...
-        instance
+        axios
           .post("/auth/register", USER_INFOS)
           .then(function (response) {
             commit("SET_STATUS", "created");
@@ -96,21 +80,21 @@ export default createStore({
     login({ commit }, USER_INFOS) {
       //On crée une "promise" pour gérer notre code asynchrone
       return new Promise((resolve, reject) => {
-        instance
+        axios
           .post("/auth/login", USER_INFOS)
           .then(function (response) {
             commit("SET_STATUS", "");
             //On invoque notre mutation 'USERLOGIN' avec un payload qui contient userId et le token en provenance du backend.
             commit("USER_LOGIN", response.data);
-            new Promise((resolve, reject) => {
-              instance
-                .get(`/auth/accounts/${user.userId}`)
-                .then((res) => {
-                  commit("USER_INFOS", res.data.user);
-                  resolve(res);
-                })
-                .catch((error) => reject(error));
-            });
+            console.log(response.data);
+            axios
+              .get(`/auth/accounts/${response.data.userId}`)
+              .then((res) => {
+                commit("USER_INFOS", res.data.user);
+                console.log(res.data);
+                resolve(res);
+              })
+              .catch((error) => reject(error));
             resolve(response);
           })
           .catch(function (error) {
@@ -125,8 +109,10 @@ export default createStore({
 
     getUserInfos({ commit }) {
       return new Promise((resolve, reject) => {
-        instance
-          .get(`/auth/accounts/${user.userId}`)
+        console.log(user);
+        let storageUser = JSON.parse(localStorage.getItem("user"));
+        axios
+          .get(`/auth/accounts/${storageUser.userId}`)
           .then((res) => {
             commit("USER_INFOS", res.data.user);
             resolve(res);

@@ -240,11 +240,19 @@ $tertiary_color--clear: #b9fdb9ed;
     & .btn-submit {
       background-color: $tertiary_color;
       color: white;
+      transition: transform 0.3s;
+    }
+    & .btn-submit:hover {
+      transform: scale(1.1);
     }
     & .btn-cancel {
       background-color: $secondary_color;
       color: white;
-      margin-left: 0.2rem;
+      margin-left: 0.5rem;
+      transition: transform 0.3s;
+    }
+    & .btn-cancel:hover {
+      transform: scale(1.1);
     }
   }
 }

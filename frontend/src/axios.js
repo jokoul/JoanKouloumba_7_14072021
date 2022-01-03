@@ -1,13 +1,8 @@
 import axios from "axios";
-
+/*
 const instance = axios.create({
   baseURL: "http://localhost:3000/api",
 });
-/*
-let user = this.$store.state.user;
-console.log(user);
-instance.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
-*/
 
 let user = localStorage.getItem("user");
 
@@ -28,17 +23,15 @@ if (!user) {
     };
   }
 }
-
-export default axios;
-
+*/
 /*
 const HTTP = axios.create({
-  baseURL: `http://127.0.0.1:3000/api/`,
+  baseURL: `http://localhost:3000/api`,
 });
 
 HTTP.interceptors.request.use(
   (config) => {
-    let token = store.state.token;
+    let token = this.$store.state.usertoken;
     if (token != null) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -46,6 +39,28 @@ HTTP.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  } 
+  }
 );
 */
+
+let user = localStorage.getItem("user");
+axios.defaults.baseURL = "http://localhost:3000/api";
+
+if (!user) {
+  user = {
+    userId: null,
+    token: "",
+  };
+} else {
+  try {
+    user = JSON.parse(user);
+    axios.defaults.headers.common["Authorization"] = `bearer ${user.token}`;
+  } catch (error) {
+    user = {
+      userId: null,
+      token: "",
+    };
+  }
+}
+
+export default axios;

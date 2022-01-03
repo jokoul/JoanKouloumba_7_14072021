@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "../axios";
 import ModalAccountDelete from "./ModalAccountDelete.vue";
 
 export default {
@@ -137,14 +137,7 @@ export default {
         formData.append("profil", this.image);
         formData.append("firstname", this.firstname);
         formData.append("lastname", this.lastname);
-        const user = JSON.parse(localStorage.getItem("user"));
-        const instance = axios.create({
-          baseURL: "http://localhost:3000/api",
-        });
-        instance.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${user.token}`;
-        instance
+        axios
           .put(`/auth/accounts/${this.user_id}`, formData)
           .then((res) => {
             console.log(res);
@@ -155,15 +148,7 @@ export default {
     },
     deleteAccount() {
       const self = this;
-      const user = JSON.parse(localStorage.getItem("user"));
-      const instance = axios.create({
-        baseURL: "http://localhost:3000/api",
-      });
-      instance.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${user.token}`;
-      console.log(this.user_id);
-      instance
+      axios
         .delete(`/auth/accounts/${this.user_id}`)
         .then((res) => {
           console.log(res);
