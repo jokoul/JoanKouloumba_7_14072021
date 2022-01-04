@@ -168,8 +168,7 @@ export default {
   },
   mounted() {
     if (localStorage.getItem("user")) {
-      this.$router.push("/home");
-      return;
+      return this.$router.push("/home");
     }
   },
   computed: {

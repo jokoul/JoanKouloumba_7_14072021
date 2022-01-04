@@ -41,6 +41,7 @@ HTTP.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+export { HTTP };
 */
 
 let user = localStorage.getItem("user");
@@ -63,5 +64,4 @@ if (!user) {
   }
 }
 
-/*export { HTTP };*/
 export default axios;

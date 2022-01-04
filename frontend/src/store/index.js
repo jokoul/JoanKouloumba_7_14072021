@@ -50,7 +50,6 @@ export default createStore({
         profil: "",
       };
       localStorage.removeItem("user");
-      localStorage.removeItem("name");
     },
     USER_INFOS(state, userInfos) {
       //On modifie le "userInfos" du state à partir de celui du payload
