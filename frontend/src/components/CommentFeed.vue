@@ -184,17 +184,21 @@ $tertiary_color--clear: #b9fdb9ed;
   @media screen and (max-width: 576px) {
     right: 1rem;
   }
+  @media screen and (min-width: 1024px) {
+    right: 1rem;
+  }
   & .far {
     position: absolute;
     top: 0rem;
     right: 0.25rem;
+    transform-origin: center center;
   }
   & .fas {
     position: absolute;
     top: 0rem;
     right: 0.25rem;
     opacity: 0;
-    transform: scale(0);
+    transform: scaleY(0);
     transform-origin: 50% 100%;
     transition: opacity 0.5s, transform 0.5s;
   }
@@ -221,7 +225,7 @@ $tertiary_color--clear: #b9fdb9ed;
       -webkit-background-clip: text;
       color: transparent;
       opacity: 1;
-      transform: scale(1);
+      transform: scaleY(1);
     }
   }
 }

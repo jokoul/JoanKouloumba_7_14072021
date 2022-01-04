@@ -5,10 +5,10 @@
         <img src="../assets/logo_left.png" alt="groupomania logo" />
       </router-link>
       <nav class="header__nav">
-        <router-link to="/setting" class="header__nav__link">
+        <router-link to="/setting" class="header__nav__link btn">
           <i class="fas fa-user"></i> Compte</router-link
         >
-        <router-link to="/home" class="header__nav__link">
+        <router-link to="/home" class="header__nav__link btn">
           <i class="fas fa-home"></i> Accueil
         </router-link>
         <button @click="logout()" class="header__nav__link btn">

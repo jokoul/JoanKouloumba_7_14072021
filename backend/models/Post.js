@@ -4,6 +4,7 @@ const PostModerated = require("./PostModerated");
 const Comment = require("./Comment");
 const PostDisliked = require("./PostDisliked");
 const PostLiked = require("./PostLiked");
+const fs = require("fs");
 
 const Post = sequelize.define("Post", {
   post_id: {
@@ -55,5 +56,10 @@ Post.hasOne(PostModerated, {
   onUpdate: "CASCADE",
 });
 PostModerated.belongsTo(Post, { foreignKey: "post_id" });
+
+Post.afterDestroy((post, options) => {
+  const filename = post.image_url.split("/images/posts/")[1];
+  fs.unlink("images/posts/" + filename, () => console.log("OK"));
+});
 
 module.exports = Post;

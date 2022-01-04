@@ -194,6 +194,37 @@ $tertiary_color--clear: #b9fdb9ed;
   justify-content: $justify;
   align-items: $align;
 }
+@keyframes nope {
+  0% {
+    margin-right: 0.5rem;
+  }
+  25% {
+    margin-right: 0.1rem;
+    margin-left: 0.9rem;
+  }
+  75% {
+    margin-right: 0.9rem;
+    margin-left: 0.1rem;
+  }
+  100% {
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+  }
+}
+@keyframes yep {
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(0.5rem);
+  }
+  75% {
+    transform: translateY(-0.5rem);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
 .card {
   margin: 1rem auto;
   padding: 0.2rem;
@@ -223,7 +254,7 @@ $tertiary_color--clear: #b9fdb9ed;
       }
       &__buttons {
         &__btn {
-          margin-left: 0.2rem;
+          margin: 0.5rem;
         }
       }
     }
@@ -245,5 +276,11 @@ $tertiary_color--clear: #b9fdb9ed;
 .btn-delete {
   background-color: $secondary_color;
   color: white;
+  &:hover {
+    animation: nope 0.5s ease-in-out both;
+  }
+}
+.btn-primary:hover {
+  animation: yep 0.5s ease-in-out forwards;
 }
 </style>

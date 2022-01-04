@@ -53,9 +53,42 @@ $tertiary_color--clear: #b9fdb9ed;
   justify-content: $justify;
   align-items: $align;
 }
-
+@keyframes bigSmall {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes balance {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  50% {
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
 .title {
   margin-top: 5rem;
+  margin-left: 2rem;
   @media screen and (max-width: 770px) {
     margin-top: 13rem;
   }
@@ -63,6 +96,11 @@ $tertiary_color--clear: #b9fdb9ed;
   &__img {
     width: 5rem;
     border-radius: 1rem;
+    margin-bottom: 0.5rem;
+    animation: bigSmall 5s 1s ease-in-out infinite;
+    &:hover {
+      animation: balance 3s ease-in-out infinite;
+    }
   }
   &__hello {
     font-size: 1.5rem;

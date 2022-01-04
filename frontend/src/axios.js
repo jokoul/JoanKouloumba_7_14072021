@@ -31,9 +31,9 @@ const HTTP = axios.create({
 
 HTTP.interceptors.request.use(
   (config) => {
-    let token = this.$store.state.usertoken;
-    if (token != null) {
-      config.headers["Authorization"] = `Bearer ${token}`;
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user.token != null) {
+      config.headers["Authorization"] = `Bearer ${user.token}`;
     }
     return config;
   },
@@ -63,4 +63,5 @@ if (!user) {
   }
 }
 
+/*export { HTTP };*/
 export default axios;

@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "../axios.js";
 import { mapGetters } from "vuex";
 
 export default {
@@ -56,17 +56,10 @@ export default {
   },
   methods: {
     reactComment() {
-      const user = JSON.parse(localStorage.getItem("user"));
-      const instance = axios.create({
-        baseURL: "http://localhost:3000/api",
-      });
-      instance.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${user.token}`;
-      instance
+      axios
         .post(`/comments/${this.post_id}`, {
           comment_text: this.newComment,
-          user_id: this.getUser.userId,
+          //user_id: this.getUser.userId,
         })
         .then((res) => {
           console.log(res);
@@ -79,17 +72,10 @@ export default {
         this.IsLiked = true;
         this.like = 1;
         this.dislikeActive = true;
-        const user = JSON.parse(localStorage.getItem("user"));
-        const instance = axios.create({
-          baseURL: "http://localhost:3000/api",
-        });
-        instance.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${user.token}`;
-        instance
+        axios
           .post(`/posts/${this.post_id}/like`, {
             like: this.like,
-            user_id: this.getUser.userId,
+            //user_id: this.getUser.userId,
           })
           .then((res) => {
             this.$emit("reload");
@@ -100,17 +86,10 @@ export default {
         this.IsLiked = false;
         this.like = 0;
         this.dislikeActive = false;
-        const user = JSON.parse(localStorage.getItem("user"));
-        const instance = axios.create({
-          baseURL: "http://localhost:3000/api",
-        });
-        instance.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${user.token}`;
-        instance
+        axios
           .post(`/posts/${this.post_id}/like`, {
             like: this.like,
-            user_id: this.getUser.userId,
+            //user_id: this.getUser.userId,
           })
           .then((res) => {
             this.$emit("reload");
@@ -124,17 +103,10 @@ export default {
         this.IsDisliked = true;
         this.like = -1;
         this.likeActive = true;
-        const user = JSON.parse(localStorage.getItem("user"));
-        const instance = axios.create({
-          baseURL: "http://localhost:3000/api",
-        });
-        instance.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${user.token}`;
-        instance
+        axios
           .post(`/posts/${this.post_id}/like`, {
             like: this.like,
-            user_id: this.getUser.userId,
+            //user_id: this.getUser.userId,
           })
           .then((res) => {
             this.$emit("reload");
@@ -145,17 +117,10 @@ export default {
         this.IsDisliked = false;
         this.like = 0;
         this.likeActive = false;
-        const user = JSON.parse(localStorage.getItem("user"));
-        const instance = axios.create({
-          baseURL: "http://localhost:3000/api",
-        });
-        instance.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${user.token}`;
-        instance
+        axios
           .post(`/posts/${this.post_id}/like`, {
             like: this.like,
-            user_id: this.getUser.userId,
+            //user_id: this.getUser.userId,
           })
           .then((res) => {
             this.$emit("reload");
@@ -166,15 +131,10 @@ export default {
     },
   },
   mounted() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const instance = axios.create({
-      baseURL: "http://localhost:3000/api",
-    });
-    instance.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
-    instance
+    axios
       .post(`/counters/like`, {
         post_id: this.post_id,
-        user_id: this.getUser.userId,
+        //user_id: this.getUser.userId,
       })
       .then((res) => {
         if (res.data.userLike) {
@@ -185,10 +145,10 @@ export default {
         console.log(res);
       })
       .catch((error) => console.log(error));
-    instance
+    axios
       .post(`/counters/dislike`, {
         post_id: this.post_id,
-        user_id: this.getUser.userId,
+        //user_id: this.getUser.userId,
       })
       .then((res) => {
         if (res.data.userDislike) {
@@ -239,6 +199,7 @@ $tertiary_color--clear: #b9fdb9ed;
     }
     & .btn-submit {
       background-color: $tertiary_color;
+      margin-top: 0.5rem;
       color: white;
       transition: transform 0.3s;
     }
@@ -249,6 +210,7 @@ $tertiary_color--clear: #b9fdb9ed;
       background-color: $secondary_color;
       color: white;
       margin-left: 0.5rem;
+      margin-top: 0.5rem;
       transition: transform 0.3s;
     }
     & .btn-cancel:hover {

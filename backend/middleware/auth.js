@@ -9,9 +9,10 @@ module.exports = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, `${secretKey}`);
     const userId = decodedToken.userId;
-    if (req.body.user_id && req.body.user_id !== userId) {
+    if (userId == null) {
       throw "User ID is invalid ! Unauthenticated request !";
     } else {
+      req.body.user_id = userId;
       next();
     }
   } catch (error) {

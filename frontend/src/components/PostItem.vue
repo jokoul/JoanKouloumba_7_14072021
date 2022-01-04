@@ -30,11 +30,11 @@
     <div class="postCreate__button">
       <input
         type="submit"
-        class="btn postCreate__button__poster col-2 m-1"
+        class="btn postCreate__button__poster col-2"
         value="Publier"
       />
       <input
-        class="btn postCreate__button__cancel col-2 m-1"
+        class="btn postCreate__button__cancel col-2"
         type="reset"
         value="Annuler"
         @click="eraseImg()"
@@ -140,6 +140,7 @@ $tertiary_color--clear: #b9fdb9ed;
     }
     &__poster {
       background-color: $tertiary_color;
+      margin: 0.5rem 1rem;
       color: white;
       @media screen and (max-width: 770px) {
         padding: 0.1rem;
@@ -152,6 +153,7 @@ $tertiary_color--clear: #b9fdb9ed;
     }
     &__cancel {
       background-color: $secondary_color;
+      margin: 0.5rem 1rem;
       color: white;
       @media screen and (max-width: 770px) {
         padding: 0.1rem;
