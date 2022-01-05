@@ -358,7 +358,7 @@ $tertiary_color--clear: #88ec88;
       }
     }
     &__submit {
-      padding: 1rem;
+      padding: 1.5rem;
       font-size: 1rem;
       @include dimension($width: 60%, $height: 2rem);
       @include flexbox($display: flex, $justify: center, $align: center);

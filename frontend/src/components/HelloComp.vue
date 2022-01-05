@@ -1,6 +1,6 @@
 <template>
   <div class="title">
-    <router-link to="/setting">
+    <router-link :to="`/profile/${getUser.userId}`">
       <img
         v-if="getProfil"
         class="title__img"
@@ -27,7 +27,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["getProfil", "getUserAccount"]),
+    ...mapGetters(["getProfil", "getUserAccount", "getUser"]),
   },
   created() {
     //on propage notre action 'getUserInfos'

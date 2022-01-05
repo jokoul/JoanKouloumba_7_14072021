@@ -10,21 +10,23 @@
     >
       <div class="comments__comment__info row">
         <div class="comments__comment__info__author col-sm-9 col-12">
-          <img
-            class="comments__comment__info__author__img"
-            v-if="comment.User.profil"
-            :src="comment.User.profil"
-            :alt="comment.User.firstname"
-          />
-          <img
-            class="comments__comment__info__author__img"
-            v-else
-            src="../assets/avatar_default.png"
-            :alt="comment.User.firstname"
-          />
-          <h2 class="comments__comment__info__author__name">
-            {{ comment.User.firstname }} {{ comment.User.lastname }}
-          </h2>
+          <router-link class="routerLink" :to="`/profile/${comment.user_id}`">
+            <img
+              class="comments__comment__info__author__img"
+              v-if="comment.User.profil"
+              :src="comment.User.profil"
+              :alt="comment.User.firstname"
+            />
+            <img
+              class="comments__comment__info__author__img"
+              v-else
+              src="../assets/avatar_default.png"
+              :alt="comment.User.firstname"
+            />
+            <h2 class="comments__comment__info__author__name">
+              {{ comment.User.firstname }} {{ comment.User.lastname }}
+            </h2>
+          </router-link>
           <p class="comments__comment__info__author__date">
             {{ formatDate(comment.createdAt, comment.updatedAt) }}
           </p>
@@ -228,5 +230,9 @@ $tertiary_color--clear: #b9fdb9ed;
       transform: scaleY(1);
     }
   }
+}
+.routerLink {
+  color: inherit;
+  text-decoration: none;
 }
 </style>

@@ -13,5 +13,6 @@ router.put("/:post_id", auth, multer.post, postCtrl.modifyPost);
 router.delete("/:post_id", auth, postCtrl.deletePost);
 router.post("/:post_id/like", auth, postCtrl.modifyLikePost);
 router.post("/:post_id/moderate", auth, postCtrl.moderatePost);
+router.get("/:user_id/profile", auth, postCtrl.getPostProfile);
 
 module.exports = router;

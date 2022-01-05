@@ -184,3 +184,19 @@ exports.moderatePost = (req, res, next) => {
       .catch((error) => res.status(200).json({ error }));
   }
 };
+
+exports.getPostProfile = (req, res, next) => {
+  const userId = req.params.user_id;
+  Post.findAll({
+    where: {
+      user_id: userId,
+      post_id: {
+        [Op.notIn]: sequelize.literal(`(SELECT post_id FROM PostModerateds)`),
+      },
+    },
+    limit: 10,
+    order: [["createdAt", "DESC"]],
+  })
+    .then((posts) => res.status(200).json({ posts }))
+    .catch((error) => res.status(400).json({ error }));
+};

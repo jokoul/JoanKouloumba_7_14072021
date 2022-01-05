@@ -12,21 +12,23 @@
       <div class="card__post">
         <div class="card__post__info">
           <div class="card__post__info__author">
-            <img
-              class="card__post__info__author__img"
-              v-if="post.User.profil"
-              :src="post.User.profil"
-              :alt="post.User.firstname"
-            />
-            <img
-              class="card__post__info__author__img"
-              v-else
-              src="../assets/avatar_default.png"
-              :alt="post.User.firstname"
-            />
-            <h2 class="card__post__info__author__name">
-              {{ post.User.firstname }} {{ post.User.lastname }}
-            </h2>
+            <router-link class="routerLink" :to="`/profile/${post.user_id}`">
+              <img
+                class="card__post__info__author__img"
+                v-if="post.User.profil"
+                :src="post.User.profil"
+                :alt="post.User.firstname"
+              />
+              <img
+                class="card__post__info__author__img"
+                v-else
+                src="../assets/avatar_default.png"
+                :alt="post.User.firstname"
+              />
+              <h2 class="card__post__info__author__name">
+                {{ post.User.firstname }} {{ post.User.lastname }}
+              </h2>
+            </router-link>
             <p class="card__post__info__author__date">
               {{ formatDate(post.createdAt, post.updatedAt) }}
             </p>
@@ -282,5 +284,9 @@ $tertiary_color--clear: #b9fdb9ed;
 }
 .btn-primary:hover {
   animation: yep 0.5s ease-in-out forwards;
+}
+.routerLink {
+  color: inherit;
+  text-decoration: none;
 }
 </style>

@@ -3,6 +3,7 @@ import LogSign from "../views/LogSign.vue";
 import HomeView from "../views/HomeView.vue";
 import UserSetting from "../views/UserSetting.vue";
 import OneView from "../views/OneView.vue";
+import ProfileView from "../views/ProfileView.vue";
 
 const routes = [
   {
@@ -29,6 +30,11 @@ const routes = [
     name: "OneView",
     component: OneView,
   },
+  {
+    path: "/profile/:user_id",
+    name: "ProfileView",
+    component: ProfileView,
+  },
 ];
 
 const router = createRouter({
@@ -45,6 +51,12 @@ router.beforeEach((to, from, next) => {
 
 router.beforeEach((to, from, next) => {
   if (to.name == "UserSetting" && !localStorage.getItem("user"))
+    next({ name: "LogSign" });
+  else next();
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.name == "ProfileView" && !localStorage.getItem("user"))
     next({ name: "LogSign" });
   else next();
 });

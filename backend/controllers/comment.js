@@ -98,3 +98,21 @@ exports.moderateComment = (req, res, next) => {
       .catch((error) => res.status(400).json({ error }));
   }
 };
+
+exports.getCommentProfile = (req, res, next) => {
+  const userId = req.params.user_id;
+  Comment.findAll({
+    where: {
+      user_id: userId,
+      comment_id: {
+        [Op.notIn]: sequelize.literal(
+          `(SELECT comment_id FROM CommentModerateds)`
+        ),
+      },
+    },
+    limit: 10,
+    order: [["createdAt", "DESC"]],
+  })
+    .then((comments) => res.status(200).json({ comments }))
+    .catch((error) => res.status(400).json({ error }));
+};
