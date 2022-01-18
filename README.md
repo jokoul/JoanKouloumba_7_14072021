@@ -1,3 +1,5 @@
+# Projet 7 : Créer un réseau social d’entreprise avec le framework Vue.js
+
 OCR - Parcours developpeur web - P7 - Groupomania
 
 objectif : Créez un réseau social d’entreprise
